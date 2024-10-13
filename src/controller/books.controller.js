@@ -71,3 +71,61 @@ export const createBook = async (req, res) => {
     }
   })
 }
+
+export const getBook = async (req, res) => {
+  const { id } = req.params
+  const book = await prisma.book.findUnique({
+    where: {
+      id: parseInt(id)
+    }
+  })
+
+  if (!book) {
+    return res.status(404).json({ error: 'Book not found' })
+  }
+
+  res.json(book)
+}
+
+export const updateBook = async (req, res) => {
+  const { id } = req.params
+  const { title, author, publishedDate } = req.body
+
+  try {
+    // Verificar si el libro existe
+    const existingBook = await prisma.book.findUnique({
+      where: { id: parseInt(id) }
+    })
+
+    if (!existingBook) {
+      return res.status(404).json({ error: 'Book not found' })
+    }
+
+    // Actualizar el libro
+    const updatedBook = await prisma.book.update({
+      where: {
+        id: parseInt(id)
+      },
+      data: {
+        title,
+        author,
+        publishedDate: new Date(publishedDate)
+      }
+    })
+
+    res.json(updatedBook)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const deleteBook = async (req, res) => {
+  const { id } = req.params
+  const book = await prisma.book.delete({
+    where: {
+      id: parseInt(id)
+    }
+  })
+
+  res.json(book)
+}

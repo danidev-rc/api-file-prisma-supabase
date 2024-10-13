@@ -1,0 +1,14 @@
+GET http://localhost:3000/api/books
+###
+GET http://localhost:3000/api/books/1
+###
+PATCH http://localhost:3000/api/books/1
+Content-Type: application/json
+
+{
+  "title": "JavaScript",
+  "author": "Nuevo autor",
+  "publishedDate": "2023-10-01"
+}
+###
+DELETE http://localhost:3000/api/books/3
